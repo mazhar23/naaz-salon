@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#fbf1f4">
+<title>Naaz Salon Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #fbf1f4; --surface: #ffffff; --surface-2: #f6e4ea; --ink: #2b1621; --ink-soft: #7a5866; --line: #ecd3dc;
+  --accent: #b0345f; --good: #2f7d4f; --bad: #c0392b; --btn: #2b1621; --btn-ink: #fbf1f4;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a0f15; --surface: #26161e; --surface-2: #35202a; --ink: #f8e9ee; --ink-soft: #c4a0ae; --line: #432a35;
+    --accent: #e0668d; --good: #5fc08a; --bad: #ff8a7a; --btn: #f8e9ee; --btn-ink: #1a0f15; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.app { display: grid; gap: 16px; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45;
+  padding-block: calc(24px + env(safe-area-inset-top, 0px)) calc(40px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 16px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+h1 { font-family: var(--font-display); font-size: 30px; line-height: 1.1; margin: 0; letter-spacing: -.01em; }
+h1 span { color: var(--accent); }
+.top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.top .who { margin-left: auto; color: var(--ink-soft); font-size: 13px; min-width: 0; overflow-wrap: anywhere; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px 16px; }
+label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 6px; color: var(--ink-soft); }
+input[type="text"], input[type="email"], input[type="password"], input[type="search"], select {
+  width: 100%; font: 16px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 12px; padding: 11px 12px; min-height: 46px;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--btn); color: var(--btn-ink);
+  border: 0; border-radius: 12px; padding: 11px 16px; min-height: 44px; font: 600 15px var(--font-body); cursor: pointer; text-decoration: none;
+}
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn.danger { background: transparent; color: var(--bad); border: 1px solid var(--bad); }
+.btn.small { min-height: 36px; padding: 6px 12px; font-size: 13px; border-radius: 10px; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.msg { margin: 12px 0 0; font-weight: 600; min-height: 1.4em; }
+.msg.err { color: var(--bad); } .msg.ok { color: var(--good); }
+.login { max-width: 400px; margin: 8vh auto 0; width: 100%; }
+.login .btn { width: 100%; margin-top: 16px; }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+.stat b { display: block; font-family: var(--font-display); font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat span { color: var(--ink-soft); font-size: 13px; }
+
+.tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+.tools .grow { flex: 1 1 220px; min-width: 0; }
+.tools label { margin-top: 0; }
+.tools .field { flex: 0 1 180px; min-width: 0; }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; background: var(--surface-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+td .acts { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.empty { padding: 28px 16px; text-align: center; color: var(--ink-soft); }
+.pill { display: inline-block; padding: 2px 10px; border-radius: 99px; background: var(--surface-2); color: var(--accent); font-size: 12px; font-weight: 600; }
+.foot { color: var(--ink-soft); font-size: 13px; }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <section class="card login" id="loginView" hidden aria-labelledby="loginTitle">
+    <h1 id="loginTitle">Naaz <span>Admin</span></h1>
+    <p class="foot">Sign in to see your members.</p>
+    <form id="loginForm">
+      <label for="lEmail">Email</label>
+      <input type="email" id="lEmail" autocomplete="username" required>
+      <label for="lPass">Password</label>
+      <input type="password" id="lPass" autocomplete="current-password" required>
+      <button class="btn" id="lBtn" type="submit">Sign in</button>
+      <p class="msg" id="lMsg" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <div id="appView" class="app" hidden>
+    <div class="top">
+      <h1>Naaz <span>Members</span></h1>
+      <span class="who" id="who"></span>
+      <button class="btn ghost small" id="outBtn" type="button">Sign out</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="sTotal">0</b><span>Total members</span></div>
+      <div class="stat"><b id="sWeek">0</b><span>Joined in last 7 days</span></div>
+      <div class="stat"><b id="sBday">0</b><span>Birthdays this month</span></div>
+    </div>
+
+    <div class="tools">
+      <div class="grow">
+        <label for="q">Search name or number</label>
+        <input type="search" id="q" placeholder="Type to search" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="flt">Show</label>
+        <select id="flt">
+          <option value="all">All members</option>
+          <option value="bday">Birthday this month</option>
+          <option value="week">Joined last 7 days</option>
+        </select>
+      </div>
+      <button class="btn" id="csvBtn" type="button">Download CSV</button>
+      <button class="btn ghost" id="refBtn" type="button">Refresh</button>
+    </div>
+    <p class="msg" id="aMsg" role="status" aria-live="polite"></p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Name</th><th>Mobile</th><th>Birthday</th><th>Joined</th><th aria-label="Actions"></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="empty" id="empty" hidden>No members to show.</div>
+    </div>
+    <p class="foot">Only people listed in the admins table can see this data.</p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* ===== Same values as in index.html ===== */
+var CONFIG = {
+  supabaseUrl: "",       /*https://efmtfudhbrhgayveibvr.supabase.co */
+  supabaseAnonKey: "",   /* sb_publishable_FDMGdXV0kTZ1ObCwkAY7GQ_SLWCPPko */
+  membersTable: "members"
+};
+/* ===== End of settings ===== */
+
+var $ = function (id) { return document.getElementById(id); };
+var sb = null, all = [], armed = null;
+try {
+  if (CONFIG.supabaseUrl && CONFIG.supabaseAnonKey && window.supabase) sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
+} catch (e) { sb = null; }
+
+function show(loggedIn) { $("loginView").hidden = loggedIn; $("appView").hidden = !loggedIn; }
+function setMsg(node, text, kind) { node.textContent = text; node.className = "msg" + (kind ? " " + kind : ""); }
+
+/* ---------- Auth ---------- */
+async function boot() {
+  show(false);
+  if (!sb) return setMsg($("lMsg"), "Supabase is not set up yet. Add your URL and anon key in admin.html.", "err");
+  var s = await sb.auth.getSession();
+  if (s.data && s.data.session) enter(s.data.session.user);
+}
+$("loginForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  if (!sb) return setMsg($("lMsg"), "Supabase is not set up yet.", "err");
+  $("lBtn").disabled = true; setMsg($("lMsg"), "Signing in...", "");
+  var r = await sb.auth.signInWithPassword({ email: $("lEmail").value.trim(), password: $("lPass").value });
+  $("lBtn").disabled = false;
+  if (r.error) return setMsg($("lMsg"), "Wrong email or password.", "err");
+  $("lPass").value = ""; setMsg($("lMsg"), "", "");
+  enter(r.data.user);
+});
+$("outBtn").addEventListener("click", async function () { await sb.auth.signOut(); all = []; render(); show(false); });
+
+async function enter(user) {
+  $("who").textContent = user && user.email ? user.email : "";
+  show(true);
+  load();
+}
+
+/* ---------- Data ---------- */
+async function load() {
+  setMsg($("aMsg"), "Loading...", "");
+  var r = await sb.from(CONFIG.membersTable).select("id,name,phone,birthday,consent,created_at").order("created_at", { ascending: false }).limit(5000);
+  if (r.error) { console.error(r.error); all = []; render(); return setMsg($("aMsg"), "Could not load members. Check that your email is in the admins table.", "err"); }
+  all = r.data || []; setMsg($("aMsg"), "", ""); render();
+}
+$("refBtn").addEventListener("click", load);
+
+function fmtDate(iso) { if (!iso) return "-"; var d = new Date(iso); return isNaN(d) ? "-" : d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }); }
+function fmtBday(s) { if (!s) return "-"; var p = s.split("-"); if (p.length < 3) return "-"; return new Date(2000, +p[1] - 1, +p[2]).toLocaleDateString("en-IN", { day: "2-digit", month: "short" }); }
+function isBdayThisMonth(m) { return m.birthday && (+m.birthday.split("-")[1] === new Date().getMonth() + 1); }
+function isLastWeek(m) { return Date.now() - new Date(m.created_at).getTime() <= 7 * 864e5; }
+
+function filtered() {
+  var q = $("q").value.trim().toLowerCase(), f = $("flt").value;
+  return all.filter(function (m) {
+    if (q && (m.name || "").toLowerCase().indexOf(q) < 0 && (m.phone || "").indexOf(q.replace(/\D/g, "") || "\u0000") < 0) return false;
+    if (f === "bday") return isBdayThisMonth(m);
+    if (f === "week") return isLastWeek(m);
+    return true;
+  });
+}
+
+function cell(tr, text, cls) { var td = document.createElement("td"); if (cls) td.className = cls; td.textContent = text; tr.appendChild(td); return td; }
+function render() {
+  $("sTotal").textContent = all.length;
+  $("sWeek").textContent = all.filter(isLastWeek).length;
+  $("sBday").textContent = all.filter(isBdayThisMonth).length;
+  var body = $("rows"); body.textContent = "";
+  var list = filtered();
+  $("empty").hidden = list.length > 0;
+  list.forEach(function (m) {
+    var tr = document.createElement("tr");
+    var nameTd = cell(tr, m.name);
+    if (isBdayThisMonth(m)) { var p = document.createElement("span"); p.className = "pill"; p.textContent = "Birthday month"; p.style.marginLeft = "8px"; nameTd.appendChild(p); }
+    cell(tr, "+91 " + m.phone, "num");
+    cell(tr, fmtBday(m.birthday), "num");
+    cell(tr, fmtDate(m.created_at), "num");
+    var act = document.createElement("td"), box = document.createElement("div"); box.className = "acts";
+    var wa = document.createElement("a"); wa.className = "btn ghost small"; wa.textContent = "WhatsApp";
+    wa.href = "https://wa.me/91" + m.phone; wa.target = "_blank"; wa.rel = "noopener";
+    var del = document.createElement("button"); del.type = "button"; del.className = "btn danger small";
+    del.textContent = armed === m.id ? "Tap again to delete" : "Delete";
+    del.addEventListener("click", function () { armed === m.id ? remove(m.id) : (armed = m.id, render()); });
+    box.appendChild(wa); box.appendChild(del); act.appendChild(box); tr.appendChild(act);
+    body.appendChild(tr);
+  });
+}
+$("q").addEventListener("input", function () { armed = null; render(); });
+$("flt").addEventListener("change", function () { armed = null; render(); });
+
+async function remove(id) {
+  armed = null;
+  var r = await sb.from(CONFIG.membersTable).delete().eq("id", id);
+  if (r.error) { console.error(r.error); return setMsg($("aMsg"), "Could not delete that member.", "err"); }
+  all = all.filter(function (m) { return m.id !== id; }); render(); setMsg($("aMsg"), "Member deleted.", "ok");
+}
+
+/* ---------- CSV ---------- */
+function csvCell(v) {
+  var s = v == null ? "" : String(v);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;           /* stops spreadsheet formula injection */
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+$("csvBtn").addEventListener("click", function () {
+  var list = filtered();
+  if (!list.length) return setMsg($("aMsg"), "Nothing to download.", "err");
+  var lines = [["Name", "Mobile", "Birthday", "Joined"].map(csvCell).join(",")];
+  list.forEach(function (m) { lines.push([m.name, m.phone, m.birthday || "", m.created_at ? m.created_at.slice(0, 10) : ""].map(csvCell).join(",")); });
+  var blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "naaz-members-" + new Date().toISOString().slice(0, 10) + ".csv";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+});
+
+boot();
+</script>
+</body>
+</html>
